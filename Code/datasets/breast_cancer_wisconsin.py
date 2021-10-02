@@ -141,27 +141,6 @@ class BcwUnlabeled(BcwDataset):
 
 if __name__ == '__main__':
     path = 'D:/Datasets/BreastCancerWisconsin/wisconsin.csv'
-    # dataset = BcwDataset(csv_path=path)
-    # data = pd.read_csv('D:/Datasets/BreastCancerWisconsin/wisconsin.csv')
-    # print(data.shape)
-    # data.head()
-    # # removing the last column as it is empty
-    # data = data.drop('Unnamed: 32', axis=1)
-    # print(data.shape)
-    # data.describe()
-    # data.info()
-    # data.isnull().sum()
-    # data['id'].nunique()
-    # data = data.drop('id', axis=1)
-    # print(data.shape)
-    # data['diagnosis'].value_counts()
-    # # plotting the pairplot
-    # # sns.pairplot(data)
-    # plt.title('Diagnosis vs concavity_mean')
-    # f, ax = plt.subplots(figsize=(18, 15))
-    # corr = data.corr()
-    # sns.heatmap(corr, mask=np.zeros_like(corr, dtype=np.bool), cmap=sns.diverging_palette(220, 10, as_cmap=True),
-    #             square=True, ax=ax)
     dataset_setup = BcwSetup()
     train_labeled_dataset, train_unlabeled_dataset, test_dataset, train_complete_dataset =\
     dataset_setup.set_datasets_for_ssl(file_path=path, n_labeled=20, party_num=2)

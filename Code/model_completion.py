@@ -297,33 +297,12 @@ def train(labeled_trainloader, unlabeled_trainloader, model, optimizer, ema_opti
         inputs_u = clip_function(inputs_u, args.half)
         inputs_x = inputs_x.type(torch.float)
         inputs_u = inputs_u.type(torch.float)
-        # if args.dataset_name in ['CIFAR10', 'CIFAR100', 'ImageNet', 'TinyImageNet', 'CINIC10L']:
-        #     inputs_x = inputs_x[:, :, :, :args.half]
-        #     inputs_u = inputs_u[:, :, :, :args.half]
-        # elif args.dataset_name == "BC_IDC" or args.dataset_name == "covid":
-        #     inputs_x = inputs_x[:, 0:1, :, :, :].squeeze(1)
-        #     inputs_u = inputs_u[:, 0:1, :, :, :].squeeze(1)
-        # else:  # args.dataset_name == "liver":
-        #     inputs_x = inputs_x[:, :args.half]
-        #     inputs_u = inputs_u[:, :args.half]
 
         batch_size = inputs_x.size(0)
 
         # Transform label to one-hot
         targets_x = targets_x.view(-1, 1).type(torch.long)
         targets_x = torch.zeros(batch_size, num_classes).scatter_(1, targets_x, 1)
-        # if args.dataset_name in ["CIFAR10", "CINIC10L"]:
-        #     targets_x = torch.zeros(batch_size, 10).scatter_(1, targets_x, 1)
-        # elif args.dataset_name == "CIFAR100":
-        #     targets_x = torch.zeros(batch_size, 100).scatter_(1, targets_x, 1)
-        # elif args.dataset_name == "liver":
-        #     targets_x = torch.zeros(batch_size, 4).scatter_(1, targets_x, 1)
-        # elif args.dataset_name == "covid":
-        #     targets_x = torch.zeros(batch_size, 3).scatter_(1, targets_x, 1)
-        # elif args.dataset_name == "TinyImageNet":
-        #     targets_x = torch.zeros(batch_size, 200).scatter_(1, targets_x, 1)
-        # else:  # args.dataset_name == "BC_IDC"/covid:
-        #     targets_x = torch.zeros(batch_size, 2).scatter_(1, targets_x, 1)
 
         if use_cuda:
             inputs_x, targets_x = inputs_x.cuda(), targets_x.cuda(non_blocking=True)
@@ -409,12 +388,6 @@ def validate(valloader, model, criterion, epoch, use_cuda, mode, num_classes, cl
         for batch_idx, (inputs, targets) in enumerate(valloader):
             # in vertical federated learning scenario, attacker(party A) only has part of features, i.e. half of the img
             inputs = clip_function(inputs, args.half)
-            # if args.dataset_name in ['CIFAR10', 'CIFAR100', 'ImageNet', 'TinyImageNet', 'CINIC10L']:
-            #     inputs = inputs[:, :, :, :args.half]
-            # elif args.dataset_name == "BC_IDC":
-            #     inputs = inputs[:, 0:1, :, :, :].squeeze(1)
-            # else:  # args.dataset_name == "heart_disease":
-            #     inputs = inputs[:, 0:args.half]
 
             # measure data loading time
             data_time.update(time.time() - end)

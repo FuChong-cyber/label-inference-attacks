@@ -40,7 +40,6 @@ parser.add_argument('--use-mal-optim', help='use mal optim or not',
                     type=bool, default=False)
 parser.add_argument('--half', help='number of features owned by                                    the adversarial participant (int)',
                     type=int, default=11)
-# /home/newdisk/fu_11921106
 
 # 4 possible defenses on/off
 parser.add_argument('--ppdl', help='turn_on_privacy_preserving_deep_learning',
@@ -203,14 +202,13 @@ def main():
     # Data Loader (Input Pipeline)
     print("len train_loader:", len(train_loader))
     print("len test_loader:", len(test_loader))
-    # 开始训练，并且每个epoch都测试一次
     optimizer = optim.SGD(model.parameters(), lr=args.lr,
                           momentum=args.momentum,
                           weight_decay=args.weight_decay)
     scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=100, gamma=0.5)
     for epoch in range(1, args.epochs + 1):
         scheduler.step()
-        for batch_idx, (data, target) in enumerate(train_loader):  # batch_idx是enumerate（）函数自带的索引，从0开始
+        for batch_idx, (data, target) in enumerate(train_loader): 
             # print("batch_idx:", batch_idx)
             data = data.float()
             target = target.long()

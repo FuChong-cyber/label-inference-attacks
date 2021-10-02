@@ -301,24 +301,14 @@ if __name__ == '__main__':
 
     args = get_args()
     sample_id_in_cifar10 = 162
-    # 162-deer 246-ship 282-car 284-airplane
-
-    # Can work with any model, but it assumes that the model has a
-    # feature method, and a classifier method,
-    # as in the VGG models in torchvision.  /SGD_LR=0.01_momentum=0.5
     file_name = "cifar10_saved_framework_lr=0.1_normal.pth"
-    # file_name = "cifar10_saved_framework_lr=0.1_normal"
-    # file_name = "cifar10_saved_framework_lr=0.1_normal_random_b"
     model = torch.load("D:/MyCodes/label_inference_attacks_against_vfl/saved_experiment_results/"
                        "saved_models/CIFAR10_saved_models/" + file_name, pickle_module=dill)
-    # del model.fc
     print(model)
     grad_cam = GradCam(model, target_layer_names=["layer4"], use_cuda=args.use_cuda)
     img = get_img_cifar10(sample_id_in_cifar10)
     input = preprocess_image(img)
     print('input.size()=', input.size())
-    # If None, returns the map for the highest scoring category.
-    # Otherwise, targets the requested index.
     target_index = None
 
     mask = grad_cam(input, target_index)

@@ -80,13 +80,3 @@ class BottomModelPlus(nn.Module):
         x = self.fc_final(x)
 
         return x
-
-    # importance, reason-insight:痛点，设计本身问题，bottom model会泄露。
-    #
-    # FL HFL VFL no relation
-    # VFL application ,use case ,label importance
-    # insight, but design not secure, reason, bottom model
-    # based on such findings, attack
-
-    # 总模型大小不变，bottom model占比对实验的影响。
-    # TSNE三个数据集。

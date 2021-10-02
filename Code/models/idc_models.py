@@ -137,49 +137,15 @@ class BottomModelOverlap(nn.Module):
 
 def update_top_model_one_batch(optimizer, model, output, batch_target, loss_func):
     loss = loss_func(output, batch_target)
-    # print("top loss:", loss)
-    # print('output: ', output)
-    # print('target: ', target)
-    optimizer.zero_grad()  # 所有参数的梯度清零
-    loss.backward()  # 即反向传播求梯度
-    # for name, params in model.named_parameters():
-    #     print("names:", name)
-    #     print("params:", params[:5])
-    #     print("params.grad:", params.grad[:5])
-    optimizer.step()  # 调用optimizer进行梯度下降更新参数
+    optimizer.zero_grad() 
+    loss.backward()
+    optimizer.step() 
     return loss
 
 
 def update_bottom_model_one_batch(optimizer, model, output, batch_target, loss_func):
     loss = loss_func(output, batch_target)
-    # print("bottom loss:", loss)
-    # print('output: ', output)
-    # print('target: ', target)
-    optimizer.zero_grad()  # 所有参数的梯度清零
-    loss.backward()  # 即反向传播求梯度
-    # for name, params in model.named_parameters():
-    #     if "bn1" in name:
-    #         print("names:", name)
-    #         print("params:", params[:5])
-    #         print("params.grad:", params.grad[:5])
-
-    optimizer.step()  # 调用optimizer进行梯度下降更新参数
+    optimizer.zero_grad() 
+    loss.backward()  
+    optimizer.step() 
     return
-
-
-# def test(net):
-#     import numpy as np
-#     total_params = 0
-#
-#     for x in filter(lambda p: p.requires_grad, net.parameters()):
-#         total_params += np.prod(x.datasets.numpy().shape)
-#     print("Total number of params", total_params)
-#     print("Total layers", len(list(filter(lambda p: p.requires_grad and len(p.datasets.size())>1, net.parameters()))))
-
-
-# if __name__ == "__main__":
-#     for net_name in __all__:
-#         if net_name.startswith('resnet'):
-#             print(net_name)
-#             test(globals()[net_name]())
-#             print()

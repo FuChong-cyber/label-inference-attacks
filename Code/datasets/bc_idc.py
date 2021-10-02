@@ -51,7 +51,6 @@ class IdcSetup(DatasetSetup):
         return idc_dataset_
 
     def clip_one_party_data(self, x, half=1):
-        # x = x[:, 0:1, :, :, :].squeeze(1)
         input_img_tuple = tuple(x[:, i:i+1, :, :, :] for i in range(0, half))
         input_tensor_adversary = torch.cat(input_img_tuple, dim=4).squeeze(1)
         return input_tensor_adversary

@@ -41,7 +41,6 @@ class MaliciousSGD(Optimizer):
             group.setdefault('nesterov', False)
 
     def step(self, closure=None):
-        # print("malicious optim stepping")
 
         loss = None
         if closure is not None:
@@ -59,16 +58,12 @@ class MaliciousSGD(Optimizer):
             nesterov = group['nesterov']
 
             start = time()
-            # Indicate which module's paras we are processing
             id_parameter = 0
 
             for p in group['params']:
                 if p.grad is None:
                     continue
-                # if id_parameter == 0:
-                #     print("before malicious ops")
-                #     print("params:", p[:2])
-                #     print("params.grad:", p.grad[:2])
+
                 if weight_decay != 0:
                     p.grad.data.add_(weight_decay, p.data)
                 if momentum != 0:
@@ -83,59 +78,16 @@ class MaliciousSGD(Optimizer):
                     else:
                         p.grad.data = buf
 
-                # show grad cos
-                # new_whole_model_params_list.extend(p.grad.clone().detach().cpu().numpy().flatten())
                 if not near_minimum:
-                    # print("MalSGD")
                     if len(self.last_parameters_grads[id_group]) <= id_parameter:
-                        # print("first batch")
-                        # print("id_params:", id_parameter)
-                        # print("p.grad.shape", p.grad.shape)
                         self.last_parameters_grads[id_group].append(p.grad.clone().detach())
                     else:
-                        # print("2nd-> epoch")
                         last_parameter_grad = self.last_parameters_grads[id_group][id_parameter]
-
-                        # 至此我们得到了model A中一个模块的上次(滑动平均后的)梯度矩阵和本次(滑动平均后的)梯度矩阵，且两者都是tensor格式
                         current_parameter_grad = p.grad.clone().detach()
                         ratio_grad_scale_up = 1.0 + self.gamma_lr_scale_up * (current_parameter_grad / (last_parameter_grad + 1e-7))
-                        # print("ratio_grad_scale_up:", ratio_grad_scale_up)
-                        # 小梯度扩增倍数修正:
-                        # 太小的参数更新会导致本次梯度扩增倍数太大，因此ratio_temp矩阵中，根据较小的last_para计算来的倍数要作废
-                        # 重新设置为1.0
-                        # background_tensor = torch.ones(ratio_grad_scale_up.shape).to(torch.float)
-                        # if 'cuda' in str(ratio_grad_scale_up.device):
-                        #     background_tensor = background_tensor.cuda()
-                        # ratio_grad_scale_up = torch.where(abs(last_parameter_grad) > self.min_grad_to_process,
-                        #                                   ratio_grad_scale_up,
-                        #                                   background_tensor)
-                        # 把动态倍率中小于min的部分改成min，大于max的部分改成max
                         ratio_grad_scale_up = torch.clamp(ratio_grad_scale_up, self.min_ratio, self.max_ratio)
-                        # stop = time()
-                        # print("tensor computation time:", str(stop - start))
-                        # print("pruned ratio_temp:", ratio_grad_scale_up)
-
-                        # if id_parameter == 0:
-                        #     self.certain_grad_ratios.append(ratio_grad_scale_up.flatten()[0])
-                        #     if len(self.certain_grad_ratios) > 100:
-                        #         plt.plot(list(range(len(self.certain_grad_ratios[0:100]))),
-                        #                  self.certain_grad_ratios[0:100], c="blue")
-                        #         plt.title("model.certain_grad_ratios")
-                        #         plt.ylim(ymax=5)
-                        #         plt.show()
-                        #         exit()
-                        # print("current_parameter.grad\n", p.grad[0])
                         p.grad.mul_(ratio_grad_scale_up)
-                        # print("current_parameter.grad mul\n", p.grad[0])
-                        # exit()
                 end = time()
-                # print("mal sgd cost:", str(end - start))
-
-                # if id_parameter == 0:
-                #     print("after malicious ops")
-                #     print("params:", p[:2])
-                #     print("params.grad:", p.grad[:2])
-
                 current_parameter_grad = p.grad.clone().detach()
                 self.last_parameters_grads[id_group][id_parameter] = current_parameter_grad
 
@@ -193,55 +145,26 @@ class MaliciousSignSGD(Optimizer):
             for p in group['params']:
                 if p.grad is None:
                     continue
-                # if id_parameter == 0:
-                #     print("before malicious ops")
-                #     print("params:", p[:2])
-                #     print("params.grad:", p.grad[:2])
                 if len(self.last_parameters_grads) <= id_parameter:
-                    # print("first batch")
-                    # print("id_params:", id_parameter)
                     self.last_parameters_grads.append(p.grad.clone().detach().numpy())
                 else:
                     last_parameter_grad = self.last_parameters_grads[id_parameter]
                     current_parameter_grad = p.grad.clone().detach().numpy()
-                    # 至此我们得到了model A中一个模块的上次梯度矩阵和本次梯度矩阵，且两者都是np格式
                     ratio_grad_scale_up = 1.0 + self.gamma_lr_scale_up * (current_parameter_grad / (last_parameter_grad + 1e-7))
                     grad_shape = current_parameter_grad.shape
                     last_parameter_grad = last_parameter_grad.flatten()
                     grad_length = len(last_parameter_grad)
                     ratio_grad_scale_up = ratio_grad_scale_up.flatten()
                     for i in range(grad_length):
-                        # 小梯度扩增倍数修正:
-                        # 太小的参数更新会导致本次梯度扩增倍数太大，因此ratio_temp矩阵中，根据较小的last_para计算来的倍数要作废
-                        # 重新设置为1.0
                         if abs(last_parameter_grad[i]) < self.min_grad_to_process:
                             ratio_grad_scale_up[i] = 1.0
-                        # 把动态倍率中小于min的部分改成min
                         ratio_grad_scale_up[i] = max(ratio_grad_scale_up[i], 1.0)
                         ratio_grad_scale_up[i] = min(ratio_grad_scale_up[i], 5.0)
                     ratio_grad_scale_up = ratio_grad_scale_up.reshape(grad_shape)
-                    # print("pruned ratio_temp:", ratio_grad_scale_up)
 
                     self.last_parameters_grads[id_parameter] = current_parameter_grad
 
-                    # if id_parameter == 0:
-                    #     self.certain_grad_ratios.append(ratio_grad_scale_up.flatten()[0])
-                    #     if len(self.certain_grad_ratios) > 100:
-                    #         plt.plot(list(range(len(self.certain_grad_ratios[0:100]))),
-                    #                  self.certain_grad_ratios[0:100], c="blue")
-                    #         plt.title("model.certain_grad_ratios")
-                    #         plt.ylim(ymax=5)
-                    #         plt.show()
-                    #         exit()
-                    # print("current_parameter.grad\n", p.grad[0])
                     p.grad = p.grad.mul(torch.tensor(ratio_grad_scale_up))
-                    # print("current_parameter.grad mul\n", p.grad[0])
-                    # exit()
-
-                # if id_parameter == 0:
-                #     print("after malicious ops")
-                #     print("params:", p[:2])
-                #     print("params.grad:", p.grad[:2])
 
                 id_parameter += 1
 
@@ -319,7 +242,6 @@ class SignSGD(Optimizer):
                     else:
                         d_p = buf
 
-                # sign SGD only uses sign of gradient to update model
                 torch.sign(d_p, out=d_p)
                 p.data.add_(-group['lr'], d_p)
 

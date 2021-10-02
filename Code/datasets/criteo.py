@@ -131,39 +131,7 @@ class CriteoUnlabeled(Criteo):
         return feat_, label_
 
 
-# class CriteoLabeled(Criteo):
-#
-#     def __init__(self, file_path, labeled_indexes=None, train=True):
-#         super(CriteoLabeled, self).__init__(file_path, train=train)
-#         self.labeled_indexes = labeled_indexes
-#
-#     def __getitem__(self, index):
-#         if self.labeled_indexes is not None:
-#             while index not in self.labeled_indexes:
-#                 index += 1
-#         features, label = super(CriteoLabeled, self).__getitem__(index)
-#         return features, label
-#
-#
-# class CriteoUnlabeled(Criteo):
-#
-#     def __init__(self, file_path, labeled_indexes=None, train=True):
-#         super(CriteoUnlabeled, self).__init__(file_path, train=train)
-#         self.labeled_indexes = labeled_indexes
-#
-#     def __getitem__(self, index):
-#         if self.labeled_indexes is not None:
-#             while index in self.labeled_indexes:
-#                 index += 1
-#         features, label = super(CriteoUnlabeled, self).__getitem__(index)
-#         return features, label
-
-
 if __name__ == "__main__":
-    # train_labeled_dataset, train_unlabeled_dataset, test_dataset, train_complete_dataset = CriteoSetup().
-    # set_datasets_for_ssl(
-    #     'D:/Datasets/Criteo/criteo.csv', 100)
-    # exit()
 
     path = 'D:/Datasets/Criteo/criteo.csv'
     dataset = Criteo(path, batch_size=5, train=True)

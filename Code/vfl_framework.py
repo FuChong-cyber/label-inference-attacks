@@ -157,21 +157,6 @@ class VflFramework(nn.Module):
                     momentum=args.momentum,
                     weight_decay=args.weight_decay)
 
-        # This setting is for sign SGD
-        # self.optimizer_top_model = MyOptimizers.SignSGD(self.top_model.parameters(), lr=0.01, momentum=0.5)
-        # self.optimizer_malicious_bottom_model_a = MyOptimizers.SignSGD(
-        #     self.malicious_bottom_model_a.parameters(),
-        #     lr=0.01, momentum=0.5)
-        # self.optimizer_benign_bottom_model_b = MyOptimizers.SignSGD(self.benign_bottom_model_b.parameters(), lr=0.01,
-        #                                                  momentum=0.5)
-
-        # This setting is for normal experiments(baseline)
-        # self.optimizer_top_model = optim.SGD(self.top_model.parameters(), lr=0.01, momentum=0.5)
-        # self.optimizer_malicious_bottom_model_a = optim.SGD(self.malicious_bottom_model_a.parameters(),
-        #                                                     lr=0.01, momentum=0.5)
-        # self.optimizer_benign_bottom_model_b = optim.SGD(self.benign_bottom_model_b.parameters(), lr=0.01,
-        #                                                  momentum=0.5)
-
     def forward(self, x):
         # in vertical federated setting, each party has non-lapping features of the same sample
         x_a, x_b = split_data(x)
