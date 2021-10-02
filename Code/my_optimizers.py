@@ -47,10 +47,6 @@ class MaliciousSGD(Optimizer):
         if closure is not None:
             loss = closure()
 
-        # show grad cos
-        # global last_whole_model_params_list, new_whole_model_params_list, batch_cos_list, near_minimum
-        # new_whole_model_params_list = []
-
         id_group = 0
         for i in range(len(self.param_groups)):
             self.last_parameters_grads.append([])
