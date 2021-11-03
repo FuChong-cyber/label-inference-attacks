@@ -1,7 +1,6 @@
 ::Yahoo
 python vfl_framework.py --use-mal-optim False --use-mal-optim-all False --use-mal-optim-top False -d Yahoo --path-dataset D:/Datasets/yahoo_answers_csv/ --k 5 --epochs 25 --lr 1e-3 -b 16 --stone1 15 --stone2 25
 python vfl_framework.py --use-mal-optim True --use-mal-optim-all True --use-mal-optim-top False -d Yahoo --path-dataset D:/Datasets/yahoo_answers_csv/ --k 5 --epochs 25 --lr 1e-3 -b 16 --stone1 15 --stone2 25
-exit
 python vfl_framework.py --use-mal-optim True --use-mal-optim-all False --use-mal-optim-top False -d Yahoo --path-dataset D:/Datasets/yahoo_answers_csv/ --k 5 --epochs 25 --lr 1e-3 -b 16 --stone1 15 --stone2 25
 ::Criteo
 python vfl_framework.py --use-mal-optim False --use-mal-optim-all False --use-mal-optim-top False -d Criteo --path-dataset D:/Datasets/Criteo/criteo.csv --k 2 --epochs 7 --half 4096 --momentum 0.5 --lr 5e-2
