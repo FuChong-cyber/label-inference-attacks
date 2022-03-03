@@ -37,7 +37,7 @@ class Cifar10Setup(DatasetSetup):
 
     def get_transformed_dataset(self, file_path, party_num=None, train=True):
         transforms_ = self.get_transforms()
-        _cifar10_dataset = datasets.CIFAR10(file_path, train, transform=transforms_)
+        _cifar10_dataset = datasets.CIFAR10(file_path, train, transform=transforms_, download=True)
         return _cifar10_dataset
 
     def clip_one_party_data(self, x, half):

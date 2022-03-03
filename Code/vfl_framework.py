@@ -621,7 +621,7 @@ if __name__ == '__main__':
     # saving path paras
     parser.add_argument('--save-dir', dest='save_dir',
                         help='The directory used to save the trained models and csv files',
-                        default='D:/MyCodes/label_inference_attacks_against_vfl/saved_experiment_results', type=str)
+                        default='./saved_experiment_results', type=str)
     # possible defenses on/off paras
     parser.add_argument('--ppdl', help='turn_on_privacy_preserving_deep_learning',
                         type=ast.literal_eval, default=False)
