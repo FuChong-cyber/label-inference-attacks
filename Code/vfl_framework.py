@@ -5,6 +5,8 @@ import time
 import dill
 from time import time
 import sys
+sys.path.insert(0, "./")
+
 import torch
 import torch.nn as nn
 import torch.nn.parallel
@@ -14,7 +16,7 @@ import torch.utils.data
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
 import pandas as pd
-import datasets.get_dataset as get_dataset
+from datasets import get_dataset
 from my_utils import utils
 from models import model_sets
 import my_optimizers

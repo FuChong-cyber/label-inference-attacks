@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import torch
 from torch.utils.data import Dataset
-from pytorch_transformers import *
+from transformers import BertTokenizer
 import torch.utils.data as Data
 import pickle
 
