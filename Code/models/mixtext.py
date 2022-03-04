@@ -1,15 +1,16 @@
 import torch
 import torch.nn as nn
-from pytorch_transformers import *
-from models.transformers.modeling_bert import BertEmbeddings, BertPooler, BertLayer
+# from pytorch_transformers import *
+# from models.transformers.modeling_bert import BertEmbeddings, BertPooler, BertLayer
 
+from transformers import BertPreTrainedModel, BertLayer, BertModel
 
 class BertModel4Mix(BertPreTrainedModel):
     def __init__(self, config):
         super(BertModel4Mix, self).__init__(config)
-        self.embeddings = BertEmbeddings(config)
+        self.embeddings = nn.Embedding(**config)
         self.encoder = BertEncoder4Mix(config)
-        self.pooler = BertPooler(config)
+        self.pooler = nn.MaxPool1d(config)
 
         self.init_weights()
 
