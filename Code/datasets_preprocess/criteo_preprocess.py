@@ -25,12 +25,12 @@ def get_x(csv_row, D):
     fullind = []
     for key, value in csv_row.items():
         s = key + '=' + value
-        fullind.append(hash(s) % D)  # weakest hash ever ?? Not anymore :P
+        fullind.append(hash(s) % D)
 
     indlist2 = []
     for i in range(len(fullind)):
         for j in range(i + 1, len(fullind)):
-            indlist2.append(fullind[i] ^ fullind[j])  # Creating interactions using XOR
+            indlist2.append(fullind[i] ^ fullind[j])
     fullind = fullind + indlist2
 
     x = [0.] * D
@@ -45,8 +45,8 @@ MAX_SAMPLE_NUM = 1e5  # 5e5
 header = ['Label', 'i1', 'i2', 'i3', 'i4', 'i5', 'i6', 'i7', 'i8', 'i9', 'i10', 'i11', 'i12', 'i13', 'c1', 'c2', 'c3',
           'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10', 'c11', 'c12', 'c13', 'c14', 'c15', 'c16', 'c17', 'c18', 'c19',
           'c20', 'c21', 'c22', 'c23', 'c24', 'c25', 'c26']
-train_txt_file_path = 'D:/Datasets/Criteo/train.txt'
-output_file_path = 'D:/Datasets/Criteo/criteo.csv'
+train_txt_file_path = 'Path to Criteo/train.txt'
+output_file_path = 'Path to Criteo/criteo.csv'
 reader = DictReader(open(train_txt_file_path), header, delimiter='\t')
 
 
