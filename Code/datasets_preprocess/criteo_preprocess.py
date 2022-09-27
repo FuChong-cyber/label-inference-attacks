@@ -20,6 +20,7 @@ from torch.utils.data import TensorDataset, DataLoader, Dataset
 from glob import glob
 import fnmatch
 
+# Code adapted from: https://github.com/swapniel99/criteo/blob/master/criteo.py
 
 def get_x(csv_row, D):
     fullind = []
