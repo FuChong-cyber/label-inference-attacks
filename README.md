@@ -62,3 +62,6 @@ Use commands in the batch files, e.g., use commands in 'run_training.bat' to tra
 [1] L. N. Darlow, E. J. Crowley, A. Antoniou, and A. J.
 Storkey. CINIC-10 is not ImageNet or CIFAR-10. arXiv
 preprint arXiv:1810.03505, 2018.
+
+## Tips
+It seems that many people do not understand the design of "keep_predict_loss" func in utils.py. Actually, this loss func is designed based on the chain rule, with the purpose of making sure that the gradient can be continually back-propagated to the weights of bottom models. Please see the derivation below.
