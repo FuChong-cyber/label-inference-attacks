@@ -47,8 +47,9 @@ class MaliciousSGD(Optimizer):
             loss = closure()
 
         id_group = 0
-        for i in range(len(self.param_groups)):
-            self.last_parameters_grads.append([])
+        if len(self.last_parameters_grads) < len(self.param_groups):
+            for i in range(len(self.param_groups)):
+                self.last_parameters_grads.append([])
 
         for group in self.param_groups:
 
